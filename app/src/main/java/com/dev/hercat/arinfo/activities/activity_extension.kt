@@ -1,6 +1,8 @@
 package com.dev.hercat.arinfo.activities
 
 import android.app.Activity
+import com.amap.api.location.AMapLocationClient
+import com.amap.api.location.AMapLocationClientOption
 import com.blankj.utilcode.util.PermissionUtils
 
 interface PermissionCallback {
@@ -35,3 +37,23 @@ fun Activity.getPermission(callback: PermissionCallback) {
             })
             .request()
 }
+
+val Activity.mLocationClient: AMapLocationClient
+    get() = AMapLocationClient(applicationContext)
+
+val Activity.locationClientConfiguratiion: AMapLocationClientOption
+    get() {
+        val configuration = AMapLocationClientOption()
+        //选择定位场景 运动模式
+        configuration.locationPurpose = AMapLocationClientOption.AMapLocationPurpose.Sport
+        //定位模式 高精度模式
+        configuration.locationMode = AMapLocationClientOption.AMapLocationMode.Hight_Accuracy
+        //定位间隔 1000ms
+        configuration.interval = 1000
+        //需要地址描述
+        configuration.isNeedAddress = true
+        //定位超时 30s
+        configuration.httpTimeOut = 30000
+        configuration.isOnceLocation = false
+        return configuration
+    }

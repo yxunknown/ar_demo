@@ -22,7 +22,7 @@ android {
     }
     sourceSets {
         main {
-            jniLibs.srcDirs = ['libs']
+            jniLibs.srcDir 'libs'
         }
     }
 }
@@ -36,8 +36,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.otaliastudios:cameraview:1.5.1'
-    implementation files('libs/BaiduLBS_Android.jar')
-
-    implementation "org.jetbrains.anko:anko:0.10.5"
+    implementation 'org.jetbrains.anko:anko:0.10.5'
     implementation 'com.blankj:utilcode:1.19.0'
+    implementation 'com.github.nisrulz:sensey:1.8.0'
+    implementation 'com.amap.api:location:4.2.0'
 }
