@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.amap.api.location.AMapLocation
+import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
 import com.dev.hercat.arinfo.R
@@ -30,49 +31,15 @@ class MainActivity : AppCompatActivity() {
             })
         }
 
-        println(mLocationClient.version)
+        val mLocationClient = AMapLocationClient(applicationContext)
+
 
         mLocationClient.setLocationOption(locationClientConfiguratiion)
 
-        mLocationClient.setLocationListener(LocationListener())
-        mLocationClient.stopLocation()
-        mLocationClient.startLocation()
-
-    }
-
-    private fun initSensor() {
-        Sensey.getInstance().startRotationAngleDetection { x: Float, y: Float, z: Float ->
-            //            println("$x $y $z")
-        }
-
-    }
-
-    override fun onResume() {
-        Log.i(TAG, "onResume")
-        super.onResume()
-//        cameraPreviewer.start()
-
-
-    }
-
-    override fun onPause() {
-        Log.i(TAG, "onPause")
-        super.onPause()
-//        cameraPreviewer.stop()
-    }
-
-    override fun onDestroy() {
-        Log.i(TAG, "onDestroy")
-        super.onDestroy()
-//        cameraPreviewer.destroy()
-    }
-
-    inner class LocationListener: AMapLocationListener {
-        override fun onLocationChanged(aMapLocation: AMapLocation?) {
+        mLocationClient.setLocationListener {aMapLocation ->
             if (aMapLocation is AMapLocation) {
                 if (aMapLocation.errorCode == 0) {
                     //get location success
-                    println("sss")
                     tvLocation.text = """
                         lat: ${aMapLocation.latitude}
                         lng: ${aMapLocation.longitude}
@@ -88,6 +55,41 @@ class MainActivity : AppCompatActivity() {
             } else {
                 Log.e(TAG, "获取定位失败")
             }
+        }
+        mLocationClient.startLocation()
+
+    }
+
+    private fun initSensor() {
+        Sensey.getInstance().startRotationAngleDetection { x: Float, y: Float, z: Float ->
+            //            println("$x $y $z")
+            tvRotation.text = "${((x + z).toInt() + 360) % 360}"
+        }
+
+    }
+
+    override fun onResume() {
+        Log.i(TAG, "onResume")
+        super.onResume()
+//        cameraPreviewer.start()
+
+
+    }
+    override fun onPause() {
+        Log.i(TAG, "onPause")
+        super.onPause()
+//        cameraPreviewer.stop()
+    }
+
+    override fun onDestroy() {
+        Log.i(TAG, "onDestroy")
+        super.onDestroy()
+//        cameraPreviewer.destroy()
+    }
+
+    inner class LocationListener: AMapLocationListener {
+        override fun onLocationChanged(aMapLocation: AMapLocation?) {
+
         }
     }
 }

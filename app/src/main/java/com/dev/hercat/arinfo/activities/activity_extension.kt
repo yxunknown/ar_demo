@@ -38,8 +38,7 @@ fun Activity.getPermission(callback: PermissionCallback) {
             .request()
 }
 
-val Activity.mLocationClient: AMapLocationClient
-    get() = AMapLocationClient(applicationContext)
+
 
 val Activity.locationClientConfiguratiion: AMapLocationClientOption
     get() {
