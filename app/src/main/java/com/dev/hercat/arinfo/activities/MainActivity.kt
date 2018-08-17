@@ -40,12 +40,8 @@ class MainActivity : AppCompatActivity() {
             if (aMapLocation is AMapLocation) {
                 if (aMapLocation.errorCode == 0) {
                     //get location success
-                    tvLocation.text = """
-                        lat: ${aMapLocation.latitude}
-                        lng: ${aMapLocation.longitude}
-                        from: ${aMapLocation.locationType}
-                        addr: ${aMapLocation.address}
-                    """.trimIndent()
+                    tvLocation.text = resources.getString(R.string.location_desc,
+                            aMapLocation.address)
                 } else {
                     Log.e(TAG, """
                         location error, error code: ${aMapLocation.errorCode},

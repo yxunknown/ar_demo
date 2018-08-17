@@ -1,6 +1,7 @@
 package com.dev.hercat.arinfo.activities
 
 import android.app.Activity
+import android.content.res.Resources
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.blankj.utilcode.util.PermissionUtils

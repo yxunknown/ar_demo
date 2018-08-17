@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ARInfo</string>
+    <string name="location_desc">address: %1$s</string>
 </resources>
