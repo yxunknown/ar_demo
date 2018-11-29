@@ -11,7 +11,7 @@ const val PI = Math.PI
  * @param lng2 lng of point2
  * @return the direction angel
  */
-fun relativeDirection(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+fun rotation(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
     var lat1 = lat1
     var lon1 = lon1
     var lat2 = lat2

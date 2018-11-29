@@ -10,9 +10,13 @@ import com.amap.api.location.AMapLocationListener
 import com.dev.hercat.arinfo.R
 import com.github.nisrulz.sensey.Sensey
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
+import java.text.DecimalFormat
+import kotlin.math.roundToInt
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), AnkoLogger {
     val TAG = "ACTIVITY_MAIN"
 
 
@@ -53,13 +57,21 @@ class MainActivity : AppCompatActivity() {
             }
         }
         mLocationClient.startLocation()
-
     }
 
     private fun initSensor() {
+        val rotationCache = mutableListOf<Float>()
         Sensey.getInstance().startRotationAngleDetection { x: Float, y: Float, z: Float ->
-            //            println("$x $y $z")
-            tvRotation.text = "${((x + z).toInt() + 360) % 360}"
+            val numberFormat = DecimalFormat("0.00")
+            if (rotationCache.size < 11) {
+                rotationCache.add(x)
+            } else {
+                val r = rotationCache.sorted()[5]
+                rotationCache.clear()
+                val orientation = if (r >= 0) r else 360 + r
+                info(orientation)
+                tvRotation.text = numberFormat.format(orientation)
+            }
         }
 
     }
@@ -81,11 +93,6 @@ class MainActivity : AppCompatActivity() {
         Log.i(TAG, "onDestroy")
         super.onDestroy()
 //        cameraPreviewer.destroy()
-    }
-
-    inner class LocationListener: AMapLocationListener {
-        override fun onLocationChanged(aMapLocation: AMapLocation?) {
-
-        }
+        Sensey.getInstance().stop()
     }
 }
