@@ -49,7 +49,7 @@ val Activity.locationClientConfiguratiion: AMapLocationClientOption
         //定位模式 高精度模式
         configuration.locationMode = AMapLocationClientOption.AMapLocationMode.Hight_Accuracy
         //定位间隔 1000ms
-        configuration.interval = 1000
+        configuration.interval = 5000
         //需要地址描述
         configuration.isNeedAddress = true
         //定位超时 30s

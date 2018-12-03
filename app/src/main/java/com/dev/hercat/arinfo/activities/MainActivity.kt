@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
             if (aMapLocation is AMapLocation) {
                 if (aMapLocation.errorCode == 0) {
                     //get location success
+                    println("lon: ${aMapLocation.longitude}, lat:${aMapLocation.latitude}")
                     tvLocation.text = resources.getString(R.string.location_desc,
                             aMapLocation.address)
                 } else {
@@ -69,7 +70,6 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
                 val r = rotationCache.sorted()[5]
                 rotationCache.clear()
                 val orientation = if (r >= 0) r else 360 + r
-                info(orientation)
                 tvRotation.text = numberFormat.format(orientation)
             }
         }
