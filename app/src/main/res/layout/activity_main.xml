@@ -11,10 +11,10 @@
         android:keepScreenOn="true"
         android:id="@+id/cameraPreviewer"/>
 
-    <!--<com.dev.hercat.arinfo.view.ArView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:id="@+id/arView"/>-->
+    <com.dev.hercat.arinfo.view.ArView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/arView"/>
 
     <TextView
         android:layout_width="match_parent"
