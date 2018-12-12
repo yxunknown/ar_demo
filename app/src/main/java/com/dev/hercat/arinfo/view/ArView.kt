@@ -90,7 +90,8 @@ class ArView : HorizontalScrollView {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-                requestLayout()
+                container.invalidate()
+                invalidate()
             } else {
                 Log.w(TAG, "data adapter is null")
             }
@@ -107,9 +108,9 @@ class ArView : HorizontalScrollView {
         view.measure(500, 100)
         println(lp.leftMargin)
         lp.topMargin = displayMetrics.heightPixels / 2 - lp.height / 2
-//        lp.rightMargin = total - left - lp.width / 2
+        lp.rightMargin = total - left - lp.width / 2
         view.layoutParams = lp
-        container.addView(view, lp)
+        container.addView(view)
     }
 }
 
