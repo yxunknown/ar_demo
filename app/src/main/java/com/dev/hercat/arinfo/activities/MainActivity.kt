@@ -94,20 +94,20 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
     override fun onResume() {
         Log.i(TAG, "onResume")
         super.onResume()
-//        cameraPreviewer.start()
+        cameraPreviewer.start()
 
 
     }
     override fun onPause() {
         Log.i(TAG, "onPause")
         super.onPause()
-//        cameraPreviewer.stop()
+        cameraPreviewer.stop()
     }
 
     override fun onDestroy() {
         Log.i(TAG, "onDestroy")
         super.onDestroy()
-//        cameraPreviewer.destroy()
+        cameraPreviewer.destroy()
         Sensey.getInstance().stop()
     }
 }
