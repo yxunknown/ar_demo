@@ -11,13 +11,14 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
+import android.widget.Scroller
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.displayMetrics
 
 
 const val PIXELS_PER_DEGREE = 60
 
-class ArView : ViewGroup {
+class ArView : HorizontalScrollView {
 
     private val TAG = "AR_VIEW"
 
@@ -32,7 +33,6 @@ class ArView : ViewGroup {
 
     private val total = PIXELS_PER_DEGREE * 480
 
-
     constructor(context: Context) : super(context) {
         init(context)
     }
@@ -46,29 +46,19 @@ class ArView : ViewGroup {
 
     private fun init(context: Context) {
         displayMetrics = context.displayMetrics
-
+        val lp = ViewGroup.LayoutParams(total, displayMetrics.heightPixels)
+        container.layoutParams = lp
+        addView(container, lp)
     }
 
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         // init container size
-        setMeasuredDimension(total, displayMetrics.heightPixels)
+        container.measure(total, displayMetrics.heightPixels)
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        for (index in 0 until childCount) {
-            val child = getChildAt(index)
-            if (child.visibility != View.GONE) {
-                val rotation = adapter!!.getRotation(index)
-                val top = displayMetrics.heightPixels / 2 - child.measuredHeight / 2
-                val left = ((rotation + 60) * PIXELS_PER_DEGREE).toInt() - child.measuredWidth / 2
-                val right = total - left - child.measuredWidth / 2
-                val bottom = displayMetrics.heightPixels / 2 - child.measuredHeight / 2
-                child.layout(left, top, right, bottom)
-            }
-        }
-
     }
 
     fun addAdapter(adapter: ArAdapter) {
@@ -79,7 +69,7 @@ class ArView : ViewGroup {
 
     fun updateOrientation(orientation: Double) {
         val scrollTO = ((orientation + 60) * PIXELS_PER_DEGREE).toInt()
-        scrollTo(scrollTO, 0)
+        smoothScrollTo(scrollTO, 0)
     }
 
     inner class DataObserver : DataSetObserver() {
@@ -91,7 +81,7 @@ class ArView : ViewGroup {
                         val convertView = views.getOrNull(index)
                         if (convertView != null) {
                             convertView.invalidate()
-                            this@ArView.removeView(convertView)
+                            container.removeView(convertView)
                         }
                         val view = adapter!!.getView(index, views.getOrNull(index), null)
                         addArInfo(view, adapter!!.getRotation(index), index)
@@ -112,9 +102,15 @@ class ArView : ViewGroup {
     }
 
     private fun addArInfo(view: View, rotation: Double, index: Int) {
-        addView(view, index)
+        val lp = FrameLayout.LayoutParams(500, 100)
+        lp.leftMargin = ((rotation + 60) * PIXELS_PER_DEGREE -  lp.width / 2).toInt()
+        view.measure(500, 100)
+        println(lp.leftMargin)
+        lp.topMargin = displayMetrics.heightPixels / 2 - lp.height / 2
+//        lp.rightMargin = total - left - lp.width / 2
+        view.layoutParams = lp
+        container.addView(view, lp)
     }
-
 }
 
 abstract class ArAdapter : BaseAdapter() {
