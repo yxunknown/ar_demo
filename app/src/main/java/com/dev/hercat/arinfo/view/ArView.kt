@@ -3,6 +3,7 @@ package com.dev.hercat.arinfo.view
 import android.content.Context
 import android.database.DataSetObserver
 import android.graphics.Color
+import android.text.Layout
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.util.Log
@@ -46,20 +47,11 @@ class ArView : HorizontalScrollView {
 
     private fun init(context: Context) {
         displayMetrics = context.displayMetrics
-        val lp = ViewGroup.LayoutParams(total, displayMetrics.heightPixels)
+        val lp = FrameLayout.LayoutParams(total, displayMetrics.heightPixels)
         container.layoutParams = lp
         addView(container, lp)
     }
 
-
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        // init container size
-        container.measure(total, displayMetrics.heightPixels)
-    }
-
-    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-    }
 
     fun addAdapter(adapter: ArAdapter) {
         this.adapter = adapter
@@ -77,21 +69,28 @@ class ArView : HorizontalScrollView {
             super.onChanged()
             if (adapter != null) {
                 try {
+                    container.removeAllViews()
                     for (index in 0 until adapter!!.count) {
                         val convertView = views.getOrNull(index)
                         if (convertView != null) {
                             convertView.invalidate()
                             container.removeView(convertView)
                         }
-                        val view = adapter!!.getView(index, views.getOrNull(index), null)
+                        val view = adapter!!.getView(index, convertView, null)
                         addArInfo(view, adapter!!.getRotation(index), index)
-                        views.add(index, view)
+                        if (views.size > index) {
+                            views[index] = view
+                        } else {
+                            views.add(view)
+                        }
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
                 container.invalidate()
                 invalidate()
+                container.requestLayout()
+                requestLayout()
             } else {
                 Log.w(TAG, "data adapter is null")
             }
@@ -103,12 +102,11 @@ class ArView : HorizontalScrollView {
     }
 
     private fun addArInfo(view: View, rotation: Double, index: Int) {
-        val lp = FrameLayout.LayoutParams(500, 100)
+        val lp = FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        view.measure(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         lp.leftMargin = ((rotation + 60) * PIXELS_PER_DEGREE -  lp.width / 2).toInt()
-        view.measure(500, 100)
-        println(lp.leftMargin)
         lp.topMargin = displayMetrics.heightPixels / 2 - lp.height / 2
-        lp.rightMargin = total - left - lp.width / 2
+        lp.rightMargin = total - lp.leftMargin - lp.width
         view.layoutParams = lp
         container.addView(view)
     }
