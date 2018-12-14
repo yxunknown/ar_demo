@@ -5,14 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.amap.api.location.AMapLocation
 import com.amap.api.location.CoordinateConverter
 import com.amap.api.location.DPoint
 import com.dev.hercat.arinfo.R
 import com.dev.hercat.arinfo.model.Point
 import com.dev.hercat.arinfo.rotation
 import com.dev.hercat.arinfo.view.ArAdapter
-import kotlin.math.roundToInt
 
 class ArAdapter(private val points: List<Point>,
                 private val context: Context): ArAdapter() {
