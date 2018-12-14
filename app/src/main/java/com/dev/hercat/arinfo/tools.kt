@@ -5,6 +5,17 @@ const val PI = Math.PI
 /**
  * line two gps coordinate and calculate the direction angel between the line and the North direction
  *
+ *   N ^
+ *     |
+ *     |
+ *     |      * p2 ^ N
+ *     |       \   |
+ *     |        \  |
+ *     |         \ |
+ *     |          * p1
+ *     |________________________________>
+ *                                      E
+ *
  * @param lat1 lat of point1
  * @param lng1 lng of point1
  * @param lat2 lat of point2
