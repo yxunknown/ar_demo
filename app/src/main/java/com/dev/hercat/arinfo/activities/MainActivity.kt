@@ -24,11 +24,11 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
     val TAG = "ACTIVITY_MAIN"
 
     private val points = listOf(
-            Point(106.553696,29.519781, "怡丰花园"),
-            Point(106.552645,29.520938, "海韵豪园"),
-            Point(106.555332,29.521228, "重庆第六人民医院"),
-            Point(106.553385,29.521307, "鲜鲜肥肠饭"),
-            Point(106.552752,29.518464, "怡丰中学"))
+            Point(106.553696,29.519781, "怡丰花园", "桃源路怡丰花园", R.drawable.yfhy),
+            Point(106.552645,29.520938, "海韵豪园", "桃源路海韵豪园", R.drawable.hyhy),
+            Point(106.555332,29.521228, "重庆第六人民医院", "大石路市六院", R.drawable.ly),
+            Point(106.553385,29.521307, "鲜鲜肥肠饭", "五小区肥肠饭", R.drawable.xxfcf),
+            Point(106.552752,29.518464, "怡丰中学", "怡丰实验中学", R.drawable.yfsyzx))
 
     private lateinit var adapter: ArAdapter
 
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
                     //get location success
                     tvLocation.text = resources.getString(R.string.location_desc,
                             aMapLocation.address)
-                    adapter.updateCurrentLocation(Point(aMapLocation.longitude, aMapLocation.latitude, ""))
+                    adapter.updateCurrentLocation(Point(aMapLocation.longitude, aMapLocation.latitude, "", "", 0))
                 } else {
                     Log.e(TAG, """
                         location error, error code: ${aMapLocation.errorCode},
@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
 
     private fun initSensor() {
         val rotationCache = mutableListOf<Float>()
-        Sensey.getInstance().startRotationAngleDetection { x: Float, y: Float, z: Float ->
+        Sensey.getInstance().startRotationAngleDetection { x: Float, _: Float, _: Float ->
             val numberFormat = DecimalFormat("0.00")
             if (rotationCache.size < 11) {
                 rotationCache.add(x)
