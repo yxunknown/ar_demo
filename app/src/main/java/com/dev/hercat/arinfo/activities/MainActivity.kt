@@ -1,6 +1,8 @@
 package com.dev.hercat.arinfo.activities
 
+import android.graphics.Color
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.ListView
@@ -8,6 +10,11 @@ import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
+import com.amap.api.maps.AMap
+import com.amap.api.maps.model.LatLng
+import com.amap.api.maps.model.MyLocationStyle
+import com.amap.api.maps.model.Polygon
+import com.amap.api.maps.model.PolygonOptions
 import com.dev.hercat.arinfo.R
 import com.dev.hercat.arinfo.adapter.ArAdapter
 import com.dev.hercat.arinfo.model.Point
@@ -32,6 +39,8 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
 
     private lateinit var adapter: ArAdapter
 
+    private lateinit var map: AMap
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +49,10 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
         arView.addAdapter(adapter)
         initLocationClient()
         initSensor()
+        map_view.onCreate(savedInstanceState)
+        map = map_view.map
+        initMap()
+        drawArea()
     }
 
     private fun initLocationClient() {
@@ -61,6 +74,7 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
                     tvLocation.text = resources.getString(R.string.location_desc,
                             aMapLocation.address)
                     adapter.updateCurrentLocation(Point(aMapLocation.longitude, aMapLocation.latitude, "", "", 0))
+
                 } else {
                     Log.e(TAG, """
                         location error, error code: ${aMapLocation.errorCode},
@@ -91,10 +105,32 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
 
     }
 
+    private fun initMap() {
+        val mLocationStyle = MyLocationStyle()
+        // set fetch location interval
+        mLocationStyle.interval(500)
+        mLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_MAP_ROTATE)
+        mLocationStyle.showMyLocation(true)
+        map.myLocationStyle = mLocationStyle
+        map.isMyLocationEnabled = true
+    }
+    private fun drawArea() {
+        val latlngs = arrayOf(LatLng(29.519142, 106.553157),
+                LatLng(29.518722,106.554734), LatLng(29.520076,106.554702),
+                LatLng(29.520818,106.553237), LatLng(29.520505,106.552352))
+        val polygonOptions = PolygonOptions()
+        polygonOptions.add(*latlngs)
+        polygonOptions.strokeWidth(5f)
+                .strokeColor(Color.argb(50, 1, 1,1))
+                .fillColor(Color.argb(50, 0, 0,255))
+        map.addPolygon(polygonOptions)
+    }
+
     override fun onResume() {
         Log.i(TAG, "onResume")
         super.onResume()
         cameraPreviewer.start()
+        map_view.onResume()
 
 
     }
@@ -102,6 +138,7 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
         Log.i(TAG, "onPause")
         super.onPause()
         cameraPreviewer.stop()
+        map_view.onPause()
     }
 
     override fun onDestroy() {
@@ -109,5 +146,11 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
         super.onDestroy()
         cameraPreviewer.destroy()
         Sensey.getInstance().stop()
+        map_view.onDestroy()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        map_view.onSaveInstanceState(outState)
     }
 }

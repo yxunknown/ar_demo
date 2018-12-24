@@ -7,6 +7,7 @@ import android.text.Layout
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
@@ -60,6 +61,11 @@ class ArView : HorizontalScrollView {
 
         // hide scroll bar
         scrollBarSize = 0
+    }
+
+    override fun onTouchEvent(ev: MotionEvent?): Boolean {
+        // dispatch to child
+        return false
     }
 
 

@@ -45,7 +45,7 @@
             android:value="194da61bc8d18ee4c4ad82b8e05673c3" />
 
         <!--configuration for AutoNav location service-->
-        <service android:name="com.amap.api.location.APSService"/>
+        <service android:name="com.amap.api.location.APSService" />
 
 
         <activity android:name=".activities.MainActivity">

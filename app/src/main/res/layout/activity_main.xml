@@ -11,6 +11,10 @@
         android:keepScreenOn="true"
         android:id="@+id/cameraPreviewer"/>
 
+    <com.amap.api.maps.MapView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/map_view"/>
     <com.dev.hercat.arinfo.view.ArView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
