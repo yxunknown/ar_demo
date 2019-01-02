@@ -191,8 +191,6 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
         super.onResume()
         cameraPreviewer.start()
         map_view.onResume()
-
-
     }
     override fun onPause() {
         Log.i(TAG, "onPause")
